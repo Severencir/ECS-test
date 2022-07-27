@@ -1,0 +1,25 @@
+using Unity.Entities;
+using Unity.Collections;
+using Unity.Transforms;
+using Unity.Mathematics;
+
+public partial class #SCRIPTNAME# : SystemBase
+{
+    EndSimulationEntityCommandBufferSystem _endSimECB;
+    protected override void OnCreate()
+    {
+        _endSimECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    }
+    protected override void OnUpdate()
+    {
+        EntityCommandBuffer.ParallelWriter pECB = _endSimECB.CreateCommandBuffer().AsParallelWriter();
+        float deltaTime = Time.DeltaTime;
+
+        Entities.ForEach((Entity e, int entityInQueryIndex) =>
+        {
+            #NOTRIM#
+
+        }).ScheduleParallel();
+        _endSimECB.AddJobHandleForProducer(Dependency);
+	}
+}
